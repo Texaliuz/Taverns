@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -52,11 +53,14 @@ public class TavernVillagers {
 
 
         trades.put(1, List.of(
-                new TradeOffers.BuyItemFactory(Items.COPPER_INGOT, 8, 8, 3, 2),
-                new TradeOffers.BuyItemFactory(Items.STRING, 7, 6, 3, 2)
+                new TradeOffers.SellItemFactory(Items.COOKED_CHICKEN, 4, 1, 12, 10),
+                new TradeOffers.SellItemFactory(Items.COOKED_BEEF, 4, 1, 12, 10),
+                new TradeOffers.SellItemFactory(Items.COOKED_RABBIT, 4, 1, 12, 10)
         ));
         trades.put(2, List.of(
-                new TradeOffers.BuyItemFactory(Items.GOLD_INGOT, 7, 8, 2, 8)
+                new TradeOffers.BuyItemFactory(Items.POTION, 7, 8, 2, 8),
+                // public SellItemFactory(ItemStack stack, int price, int count, int maxUses, int experience, float multiplier) {
+                new TradeOffers.SellItemFactory(new ItemStack(Items.POTION), 10, 1, 6, 5)
         ));
         trades.put(3, List.of(
                 new TradeOffers.BuyItemFactory(Items.DIAMOND, 1, 12, 10, 10)
