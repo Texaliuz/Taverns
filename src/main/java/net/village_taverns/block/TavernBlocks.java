@@ -26,12 +26,14 @@ public class TavernBlocks {
     public static final ArrayList<Entry> all = new ArrayList<>();
 
     private static Entry entry(String name, Block block) {
-        var entry = new Entry(name, block);
+        var settings = new Item.Settings();
+        var item = new BlockItem(block, settings);
+        var entry = new Entry(name, block, item);
         all.add(entry);
         return entry;
     }
 
-    public static final Entry BEER_TAP = entry(BeerTapBlock.NAME, new BeerTapBlock(
+    public static final Entry BARREL = entry(BeerTapBlock.NAME, new BeerTapBlock(
             AbstractBlock.Settings.create()
                 .mapColor(MapColor.OAK_TAN)
                 .instrument(NoteBlockInstrument.BASS)

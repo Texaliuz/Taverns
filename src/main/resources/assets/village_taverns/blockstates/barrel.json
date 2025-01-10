@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "village_taverns:block/barrel"
+    },
+    "facing=south": {
+      "model": "village_taverns:block/barrel",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "village_taverns:block/barrel",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "village_taverns:block/barrel",
+      "y": 270
+    }
+  }
+}

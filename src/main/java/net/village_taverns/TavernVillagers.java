@@ -43,7 +43,7 @@ public class TavernVillagers {
     }
 
     public static void register() {
-        var poi = registerPOI(BAR_TENDER, TavernBlocks.BEER_TAP.block());
+        var poi = registerPOI(BAR_TENDER, TavernBlocks.BARREL.block());
         var profession = registerProfession(
                 BAR_TENDER,
                 RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), Identifier.of(TavernsMod.ID, BAR_TENDER)));

@@ -20,12 +20,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class BeerTapBlock extends Block {
-    public static final String NAME = "beer_tap";
+    public static final String NAME = "barrel";
     public static final Identifier ID = Identifier.of(TavernsMod.ID, NAME);
 
     public BeerTapBlock(Settings settings) {
         super(settings);
     }
+
 
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
