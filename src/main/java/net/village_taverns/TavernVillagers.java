@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableSet;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
+import net.minecraft.entity.ai.brain.Activity;
+import net.minecraft.entity.ai.brain.Schedule;
+import net.minecraft.entity.ai.brain.ScheduleBuilder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
@@ -15,12 +18,16 @@ import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.poi.PointOfInterestType;
 import net.village_taverns.block.TavernBlocks;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public class TavernVillagers {
     public static final String BAR_TENDER = "bartender";
+    public static final String ALWAYS_WORK = "always_work";
+    public static final Schedule ALWAYS_WORK_SCHEDULE = new Schedule();
+    @Nullable public static VillagerProfession BAR_TENDER_PROFESSION;
 
     public static PointOfInterestType registerPOI(String name, Block block) {
         return PointOfInterestHelper.register(Identifier.of(TavernsMod.ID, name),
@@ -45,9 +52,13 @@ public class TavernVillagers {
 
     public static void register() {
         var poi = registerPOI(BAR_TENDER, TavernBlocks.BARREL.block());
+        var scheduleBuilder = new ScheduleBuilder(ALWAYS_WORK_SCHEDULE).withActivity(50, Activity.WORK).withActivity(23950, Activity.REST).build();
+        Registry.register(Registries.SCHEDULE, Identifier.of(TavernsMod.ID, ALWAYS_WORK), ALWAYS_WORK_SCHEDULE);
+
         var profession = registerProfession(
                 BAR_TENDER,
                 RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), Identifier.of(TavernsMod.ID, BAR_TENDER)));
+        BAR_TENDER_PROFESSION = profession;
 
         LinkedHashMap<Integer, List<TradeOffers.Factory>> trades = new LinkedHashMap<>();
 
