@@ -4,6 +4,7 @@
   "package": "net.village_taverns.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "PotionsMixin",
     "VillagerMixin"
   ],
   "client": [

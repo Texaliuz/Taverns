@@ -4,14 +4,18 @@ import com.google.common.collect.ImmutableSet;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.Schedule;
 import net.minecraft.entity.ai.brain.ScheduleBuilder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.village.TradeOffers;
@@ -20,6 +24,7 @@ import net.minecraft.world.poi.PointOfInterestType;
 import net.village_taverns.block.TavernBlocks;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -50,6 +55,11 @@ public class TavernVillagers {
         );
     }
 
+    private static final int POTION_PRICE_T1 = 16;
+    private static final int POTION_PRICE_T2 = 24;
+    private static final int POTION_PRICE_T3 = 32;
+    private static final int POTION_PRICE_T4 = 40;
+
     public static void register() {
         var poi = registerPOI(BAR_TENDER, TavernBlocks.BARREL.block());
         var scheduleBuilder = new ScheduleBuilder(ALWAYS_WORK_SCHEDULE).withActivity(50, Activity.WORK).withActivity(23950, Activity.REST).build();
@@ -63,60 +73,82 @@ public class TavernVillagers {
         LinkedHashMap<Integer, List<TradeOffers.Factory>> trades = new LinkedHashMap<>();
 
 
-        trades.put(1, List.of(
-                new TradeOffers.SellItemFactory(Items.COOKED_CHICKEN, 4, 1, 12, 10),
-                new TradeOffers.SellItemFactory(Items.COOKED_BEEF, 4, 1, 12, 10),
-                new TradeOffers.SellItemFactory(Items.COOKED_RABBIT, 4, 1, 12, 10)
-        ));
-        trades.put(2, List.of(
-                new TradeOffers.BuyItemFactory(Items.POTION, 7, 8, 2, 8),
-                // public SellItemFactory(ItemStack stack, int price, int count, int maxUses, int experience, float multiplier) {
-                new TradeOffers.SellItemFactory(new ItemStack(Items.POTION), 10, 1, 6, 5)
-        ));
-        trades.put(3, List.of(
-                new TradeOffers.BuyItemFactory(Items.DIAMOND, 1, 12, 10, 10)
-        ));
-        trades.put(4, List.of(
-        ));
-        trades.put(5, List.of(
-        ));
+        var trades_level_1 = new ArrayList<TradeOffers.Factory>();
+        trades_level_1.add(new TradeOffers.SellItemFactory(Items.COOKED_CHICKEN, 2, 1, 12, 10));
+        trades_level_1.add(new TradeOffers.SellItemFactory(Items.COOKED_BEEF, 4, 1, 12, 10));
+        trades_level_1.add(new TradeOffers.SellItemFactory(Items.BREAD, 4, 1, 12, 10));
+        trades_level_1.add(new TradeOffers.SellItemFactory(Items.COOKED_RABBIT, 6, 1, 12, 10));
+        trades.put(1, trades_level_1);
 
-//        trades.put(1, List.of(
-//                new TradeOffers.BuyItemFactory(Items.COPPER_INGOT, 8, 8, 3, 2),
-//                new TradeOffers.BuyItemFactory(Items.STRING, 7, 6, 3, 2),
-//                new TradeOffers.SellItemFactory(JewelryItems.copper_ring.item(), 4, 1, 12, 4)
-//        ));
-//        trades.put(2, List.of(
-//                new TradeOffers.BuyItemFactory(Items.GOLD_INGOT, 7, 8, 2, 8),
-//                new TradeOffers.SellItemFactory(JewelryItems.iron_ring.item(), 4, 1, 6, 5),
-//                new TradeOffers.SellItemFactory(JewelryItems.gold_ring.item(), 18, 1, 6, 5)
-//        ));
-//        trades.put(3, List.of(
-//                new TradeOffers.BuyItemFactory(Items.DIAMOND, 1, 12, 10, 10),
-//                new TradeOffers.SellItemFactory(JewelryItems.emerald_necklace.item(), 20, 1, 12, 10),
-//                new TradeOffers.SellItemFactory(JewelryItems.diamond_necklace.item(), 25, 1, 12, 10)
-//        ));
-//        trades.put(4, List.of(
-//                new TradeOffers.SellItemFactory(JewelryItems.ruby_ring.item(), 35, 1, 5, 15),
-//                new TradeOffers.SellItemFactory(JewelryItems.topaz_ring.item(), 35, 1, 5, 15),
-//                new TradeOffers.SellItemFactory(JewelryItems.citrine_ring.item(), 35, 1, 5, 15),
-//                new TradeOffers.SellItemFactory(JewelryItems.jade_ring.item(), 35, 1, 5, 15),
-//                new TradeOffers.SellItemFactory(JewelryItems.sapphire_ring.item(), 35, 1, 5, 13),
-//                new TradeOffers.SellItemFactory(JewelryItems.tanzanite_ring.item(), 35, 1, 5, 13)
-//        ));
-//        trades.put(5, List.of(
-//                new TradeOffers.SellItemFactory(JewelryItems.ruby_necklace.item(), 45, 1, 3, 15),
-//                new TradeOffers.SellItemFactory(JewelryItems.topaz_necklace.item(), 45, 1, 3, 15),
-//                new TradeOffers.SellItemFactory(JewelryItems.citrine_necklace.item(), 45, 1, 3, 15),
-//                new TradeOffers.SellItemFactory(JewelryItems.jade_necklace.item(), 45, 1, 3, 15),
-//                new TradeOffers.SellItemFactory(JewelryItems.sapphire_necklace.item(), 45, 1, 3, 15),
-//                new TradeOffers.SellItemFactory(JewelryItems.tanzanite_necklace.item(), 45, 1, 3, 15)
-//        ));
+        var trades_level_2 = new ArrayList<TradeOffers.Factory>();
+        trades_level_2.add(potionOffer(Potions.STRENGTH, POTION_PRICE_T1, 1, 3, 20));
+        trades_level_2.add(potionOffer(Potions.REGENERATION, POTION_PRICE_T1, 1, 3, 20));
+        trades_level_2.add(potionOffer(Potions.SWIFTNESS, POTION_PRICE_T1, 1, 3, 20));
+        trades_level_2.add(potionOffer(Potions.FIRE_RESISTANCE, POTION_PRICE_T1, 1, 3, 20));
+        trades.put(2, trades_level_2);
+
+        var trades_level_3 = new ArrayList<TradeOffers.Factory>();
+        addIfNotNull(trades_level_3, potionOffer("spell_power:spell_power.arcane", POTION_PRICE_T2, 1, 3, 30));
+        addIfNotNull(trades_level_3, potionOffer("spell_power:spell_power.fire", POTION_PRICE_T2, 1, 3, 30));
+        addIfNotNull(trades_level_3, potionOffer("spell_power:spell_power.frost", POTION_PRICE_T2, 1, 3, 30));
+        addIfNotNull(trades_level_3, potionOffer("spell_power:spell_power.healing", POTION_PRICE_T2, 1, 3, 30));
+        addIfNotNull(trades_level_3, potionOffer("ranged_weapon:ranged_weapon.damage", POTION_PRICE_T2, 1, 3, 30));
+        if (trades_level_3.isEmpty()) {
+            trades_level_3.add(potionOffer(Potions.HARMING, POTION_PRICE_T2, 1, 3, 30));
+        }
+        trades.put(3, trades_level_3);
+
+        var trades_level_4 = new ArrayList<TradeOffers.Factory>();
+        addIfNotNull(trades_level_4, potionOffer("spell_power:spell_power.critical_chance", POTION_PRICE_T3, 1, 3, 30));
+        addIfNotNull(trades_level_4, potionOffer("spell_power:spell_power.critical_damage", POTION_PRICE_T3, 1, 3, 30));
+        addIfNotNull(trades_level_4, potionOffer("spell_power:spell_power.haste", POTION_PRICE_T3, 1, 3, 30));
+        addIfNotNull(trades_level_4, potionOffer("ranged_weapon:ranged_weapon.haste", POTION_PRICE_T3, 1, 3, 30));
+        if (trades_level_4.isEmpty()) {
+            trades_level_4.add(potionOffer(Potions.LONG_REGENERATION, POTION_PRICE_T3, 1, 3, 30));
+        }
+        trades.put(4, trades_level_4);
+
+        var trades_level_5 = new ArrayList<TradeOffers.Factory>();
+        trades_level_5.add(new TradeOffers.SellItemFactory(Items.OMINOUS_BOTTLE, 60, 1, 1, 40));
+        trades_level_5.add(potionOffer(Potions.LONG_FIRE_RESISTANCE, POTION_PRICE_T4, 1, 3, 40));
+        trades.put(5, trades_level_5);
 
         for (var entry: trades.entrySet()) {
             TradeOfferHelper.registerVillagerOffers(profession, entry.getKey(), factories -> {
                 factories.addAll(entry.getValue());
             });
         }
+    }
+
+    private static <T> void addIfNotNull(List<T> list, T item) {
+        if (item != null) {
+            list.add(item);
+        }
+    }
+
+    private static TradeOffers.SellItemFactory potionOffer(String potionId, int price, int count, int maxUses, int experience) {
+        var stack = createPotionStack(potionId);
+        if (stack != null) {
+            return new TradeOffers.SellItemFactory(stack, price, count, maxUses, experience);
+        }
+        return null;
+    }
+
+    private static TradeOffers.SellItemFactory potionOffer(RegistryEntry<Potion> potion, int price, int count, int maxUses, int experience) {
+        var stack = createPotionStack(potion);
+        return new TradeOffers.SellItemFactory(stack, price, count, maxUses, experience);
+    }
+
+    @Nullable
+    private static ItemStack createPotionStack(String potionId) {
+        var id = Identifier.of(potionId);
+        var potion = Registries.POTION.getEntry(id);
+        return potion
+                .map(potionReference -> PotionContentsComponent.createStack(Items.POTION, potionReference))
+                .orElse(null);
+    }
+
+    private static ItemStack createPotionStack(RegistryEntry<Potion> potion) {
+        return PotionContentsComponent.createStack(Items.POTION, potion);
     }
 }
