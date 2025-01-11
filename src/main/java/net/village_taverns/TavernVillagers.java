@@ -92,7 +92,7 @@ public class TavernVillagers {
         addIfNotNull(trades_level_3, potionOffer("spell_power:spell_power.fire", POTION_PRICE_T2, 1, 3, 30));
         addIfNotNull(trades_level_3, potionOffer("spell_power:spell_power.frost", POTION_PRICE_T2, 1, 3, 30));
         addIfNotNull(trades_level_3, potionOffer("spell_power:spell_power.healing", POTION_PRICE_T2, 1, 3, 30));
-        addIfNotNull(trades_level_3, potionOffer("ranged_weapon:ranged_weapon.damage", POTION_PRICE_T2, 1, 3, 30));
+
         if (trades_level_3.isEmpty()) {
             trades_level_3.add(potionOffer(Potions.HARMING, POTION_PRICE_T2, 1, 3, 30));
         }
@@ -101,14 +101,15 @@ public class TavernVillagers {
         var trades_level_4 = new ArrayList<TradeOffers.Factory>();
         addIfNotNull(trades_level_4, potionOffer("spell_power:spell_power.critical_chance", POTION_PRICE_T3, 1, 3, 30));
         addIfNotNull(trades_level_4, potionOffer("spell_power:spell_power.critical_damage", POTION_PRICE_T3, 1, 3, 30));
-        addIfNotNull(trades_level_4, potionOffer("spell_power:spell_power.haste", POTION_PRICE_T3, 1, 3, 30));
-        addIfNotNull(trades_level_4, potionOffer("ranged_weapon:ranged_weapon.haste", POTION_PRICE_T3, 1, 3, 30));
+        addIfNotNull(trades_level_4, potionOffer("ranged_weapon:ranged_weapon.damage", POTION_PRICE_T3, 1, 3, 30));
         if (trades_level_4.isEmpty()) {
             trades_level_4.add(potionOffer(Potions.LONG_REGENERATION, POTION_PRICE_T3, 1, 3, 30));
         }
         trades.put(4, trades_level_4);
 
         var trades_level_5 = new ArrayList<TradeOffers.Factory>();
+        addIfNotNull(trades_level_5, potionOffer("spell_power:spell_power.haste", POTION_PRICE_T4, 1, 3, 30));
+        addIfNotNull(trades_level_5, potionOffer("ranged_weapon:ranged_weapon.haste", POTION_PRICE_T4, 1, 3, 30));
         trades_level_5.add(new TradeOffers.SellItemFactory(Items.OMINOUS_BOTTLE, 60, 1, 1, 40));
         trades_level_5.add(potionOffer(Potions.LONG_FIRE_RESISTANCE, POTION_PRICE_T4, 1, 3, 40));
         trades.put(5, trades_level_5);
