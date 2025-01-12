@@ -11,9 +11,12 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.village_taverns.TavernsMod;
@@ -27,6 +30,7 @@ public class BrewTapBlock extends Block {
 
     public BrewTapBlock(Settings settings) {
         super(settings);
+        setDefaultState(getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
     }
 
 
@@ -50,6 +54,14 @@ public class BrewTapBlock extends Block {
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         FACING = Properties.HORIZONTAL_FACING;
         builder.add(FACING);
+    }
+
+    protected BlockState rotate(BlockState state, BlockRotation rotation) {
+        return (BlockState)state.with(FACING, rotation.rotate((Direction)state.get(FACING)));
+    }
+
+    protected BlockState mirror(BlockState state, BlockMirror mirror) {
+        return state.rotate(mirror.getRotation((Direction)state.get(FACING)));
     }
 
     // MARK: Partial transparency
