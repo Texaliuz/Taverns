@@ -1,5 +1,5 @@
 {
-  "block.village_taverns.barrel": "Beer Tap",
+  "block.village_taverns.barrel": "Brew Keg",
   "block.village_taverns.barrel.hint": "Workbench for Bartender Villagers.",
   "entity.minecraft.villager.bartender": "Bartender"
 }
