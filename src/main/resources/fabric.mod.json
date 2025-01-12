@@ -5,6 +5,9 @@
   "name": "Village Taverns (RPG Series)",
   "description": "Find cozy taverns in villages, have a drink, and maybe some rest.",
   "authors": [ "Daedelus" ],
+  "contributors": [
+    "Kenddie (Artwork)"
+  ],
   "contact": {
     "repo": "https://github.com/ZsoltMolnarrr/Taverns",
     "issues": "https://github.com/ZsoltMolnarrr/Taverns/issues"

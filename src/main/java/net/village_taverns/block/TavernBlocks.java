@@ -33,7 +33,7 @@ public class TavernBlocks {
         return entry;
     }
 
-    public static final Entry BARREL = entry(BeerTapBlock.NAME, new BeerTapBlock(
+    public static final Entry BARREL = entry(BrewTapBlock.NAME, new BrewTapBlock(
             AbstractBlock.Settings.create()
                 .mapColor(MapColor.OAK_TAN)
                 .instrument(NoteBlockInstrument.BASS)

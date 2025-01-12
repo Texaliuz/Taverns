@@ -2,6 +2,7 @@ package net.village_taverns.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -13,17 +14,18 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.village_taverns.TavernsMod;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BeerTapBlock extends Block {
+public class BrewTapBlock extends Block {
     public static final String NAME = "barrel";
     public static final Identifier ID = Identifier.of(TavernsMod.ID, NAME);
 
-    public BeerTapBlock(Settings settings) {
+    public BrewTapBlock(Settings settings) {
         super(settings);
     }
 
@@ -54,5 +56,14 @@ public class BeerTapBlock extends Block {
 
     public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
         return true;
+    }
+
+    // MARK: Shape
+
+    public static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 2, 16, 14, 14);
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return SHAPE;
     }
 }
