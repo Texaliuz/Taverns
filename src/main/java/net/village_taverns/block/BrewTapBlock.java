@@ -61,9 +61,13 @@ public class BrewTapBlock extends Block {
     // MARK: Shape
 
     public static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 2, 16, 14, 14);
+    public static final VoxelShape SHAPE_R = Block.createCuboidShape(2, 0, 0, 14, 14, 16);
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return SHAPE;
+        return switch (state.get(FACING)) {
+            case NORTH, SOUTH -> SHAPE_R;
+            default -> SHAPE;
+        };
     }
 }
