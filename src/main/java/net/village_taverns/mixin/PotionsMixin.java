@@ -1,9 +1,9 @@
 package net.village_taverns.mixin;
 
-import net.fabric_extras.ranged_weapon.RangedWeaponMod;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.potion.Potions;
-import net.spell_power.SpellPowerMod;
+import net.village_taverns.compat.RangedWeaponCompat;
+import net.village_taverns.compat.SpellPowerCompat;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,12 +15,12 @@ public class PotionsMixin {
     private static void static_tail_SpellPower(CallbackInfo ci) {
         if (FabricLoader.getInstance().isModLoaded("spell_power")) {
             try {
-                SpellPowerMod.registerPotions();
+                SpellPowerCompat.init();
             } catch (Throwable t) { }
         }
         if (FabricLoader.getInstance().isModLoaded("ranged_weapon")) {
             try {
-                RangedWeaponMod.registerPotions();
+                RangedWeaponCompat.init();
             } catch (Throwable t) { }
         }
     }

@@ -1,3 +1,7 @@
+# 1.0.2
+
+- Fix crashing without Spell Power and RWA
+
 # 1.0.1
 
 - Compatibility with Lithostitched 1.4
