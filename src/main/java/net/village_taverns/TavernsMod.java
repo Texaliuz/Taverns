@@ -7,6 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.tinyconfig.ConfigManager;
 import net.village_taverns.block.TavernBlocks;
 import net.village_taverns.config.Defaults;
+import net.village_taverns.config.SecretConfig;
 
 public class TavernsMod implements ModInitializer {
 
@@ -14,6 +15,13 @@ public class TavernsMod implements ModInitializer {
 
     public static ConfigManager<StructurePoolConfig> villageConfig = new ConfigManager<>
             ("villages", Defaults.villages)
+            .builder()
+            .setDirectory(ID)
+            .sanitize(true)
+            .build();
+
+    public static ConfigManager<SecretConfig> secretConfig = new ConfigManager<>
+            ("secret", new SecretConfig())
             .builder()
             .setDirectory(ID)
             .sanitize(true)
@@ -29,5 +37,14 @@ public class TavernsMod implements ModInitializer {
             villageConfig.refresh();
             StructurePoolAPI.injectAll(villageConfig.value);
         }
+    }
+
+    private static boolean loaded = false;
+    public static SecretConfig getSecretConfig() {
+        if (!loaded) {
+            loaded = true;
+            secretConfig.refresh();
+        }
+        return secretConfig.value;
     }
 }

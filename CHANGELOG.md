@@ -1,3 +1,7 @@
+# 1.0.3
+
+- Village spawn secret
+
 # 1.0.2
 
 - Fix crashing without Spell Power and RWA

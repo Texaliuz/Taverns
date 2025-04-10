@@ -35,6 +35,8 @@ dependencies {
     // Compatibility
     modImplementation("maven.modrinth:spell-power:${project.spell_power_version}")
     modImplementation("maven.modrinth:ranged-weapon-api:${project.ranged_weapon_api_version}")
+
+    modImplementation "maven.modrinth:collective:${project.collective_version}"
 }
 
 processResources {
