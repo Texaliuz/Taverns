@@ -1,3 +1,7 @@
+# 1.0.5
+
+- Update barrel block model, thanks to D1scoball! <3
+
 # 1.0.4
 
 - Remove miscellaneous mixins
