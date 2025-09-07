@@ -1,3 +1,7 @@
+# 1.0.7
+
+- Improve snowy village structure
+
 # 1.0.6
 
 - Update translations
