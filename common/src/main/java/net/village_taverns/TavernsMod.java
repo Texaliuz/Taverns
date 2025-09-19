@@ -2,13 +2,12 @@ package net.village_taverns;
 
 import net.fabric_extras.structure_pool.api.StructurePoolAPI;
 import net.fabric_extras.structure_pool.api.StructurePoolConfig;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.tinyconfig.ConfigManager;
+import net.tiny_config.ConfigManager;
 import net.village_taverns.block.TavernBlocks;
 import net.village_taverns.config.Defaults;
 
-public class TavernsMod implements ModInitializer {
+public class TavernsMod {
 
     public static final String ID = "village_taverns";
 
@@ -19,8 +18,7 @@ public class TavernsMod implements ModInitializer {
             .sanitize(true)
             .build();
 
-    @Override
-    public void onInitialize() {
+    public static void init() {
         TavernBlocks.register();
         TavernVillagers.register();
 

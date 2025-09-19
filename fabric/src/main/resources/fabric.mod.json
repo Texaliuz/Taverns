@@ -17,10 +17,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "net.village_taverns.client.TavernsModClient"
+      "net.village_taverns.fabric.client.FabricClientMod"
     ],
     "main": [
-      "net.village_taverns.TavernsMod"
+      "net.village_taverns.fabric.FabricMod"
     ]
   },
   "mixins": [
