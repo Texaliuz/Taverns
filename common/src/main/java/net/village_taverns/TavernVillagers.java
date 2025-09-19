@@ -1,8 +1,6 @@
 package net.village_taverns;
 
 import com.google.common.collect.ImmutableSet;
-import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
-import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.ai.brain.Activity;
@@ -34,14 +32,15 @@ public class TavernVillagers {
     public static final Schedule ALWAYS_WORK_SCHEDULE = new Schedule();
     @Nullable public static VillagerProfession BAR_TENDER_PROFESSION;
 
-    public static PointOfInterestType registerPOI(String name, Block block) {
-        return PointOfInterestHelper.register(Identifier.of(TavernsMod.ID, name),
-                1, 10, ImmutableSet.copyOf(block.getStateManager().getStates()));
+    public static PointOfInterestType createPOI(String name, Block block) {
+        return new PointOfInterestType(
+                ImmutableSet.copyOf(block.getStateManager().getStates()),
+                1, 10);
     }
 
-    public static VillagerProfession registerProfession(String name, RegistryKey<PointOfInterestType> workStation) {
+    public static VillagerProfession createProfession(String name, RegistryKey<PointOfInterestType> workStation) {
         var id = Identifier.of(TavernsMod.ID, name);
-        return Registry.register(Registries.VILLAGER_PROFESSION, Identifier.of(TavernsMod.ID, name), new VillagerProfession(
+        return new VillagerProfession(
                 id.toString(),
                 (entry) -> {
                     return entry.matchesKey(workStation);
@@ -51,8 +50,7 @@ public class TavernVillagers {
                 },
                 ImmutableSet.of(),
                 ImmutableSet.of(),
-                SoundEvents.ITEM_BOTTLE_FILL)
-        );
+                SoundEvents.ITEM_BOTTLE_FILL);
     }
 
     private static final int POTION_PRICE_T1 = 16;
@@ -60,32 +58,45 @@ public class TavernVillagers {
     private static final int POTION_PRICE_T3 = 32;
     private static final int POTION_PRICE_T4 = 40;
 
-    public static void register() {
-        var poi = registerPOI(BAR_TENDER, TavernBlocks.BARREL.block());
+    public static PointOfInterestType POI;
+    public static LinkedHashMap<Integer, List<TradeOffers.Factory>> TRADES = new LinkedHashMap<>();
+
+    public static void registerPOI() {
+        POI = createPOI(BAR_TENDER, TavernBlocks.BARREL.block());
+        Registry.register(Registries.POINT_OF_INTEREST_TYPE, Identifier.of(TavernsMod.ID, BAR_TENDER), POI);
+
         var scheduleBuilder = new ScheduleBuilder(ALWAYS_WORK_SCHEDULE).withActivity(50, Activity.WORK).withActivity(23950, Activity.REST).build();
         Registry.register(Registries.SCHEDULE, Identifier.of(TavernsMod.ID, ALWAYS_WORK), ALWAYS_WORK_SCHEDULE);
+    }
 
-        var profession = registerProfession(
+    public static void registerVillagers() {
+        var profession = createProfession(
                 BAR_TENDER,
                 RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), Identifier.of(TavernsMod.ID, BAR_TENDER)));
+        Registry.register(Registries.VILLAGER_PROFESSION, Identifier.of(TavernsMod.ID, BAR_TENDER), profession);
         BAR_TENDER_PROFESSION = profession;
 
-        LinkedHashMap<Integer, List<TradeOffers.Factory>> trades = new LinkedHashMap<>();
+        setupTrades();
+    }
 
+    public static void registerTrades() {
+        // Platform-specific trade registration will be handled in platform modules
+    }
 
+    public static void setupTrades() {
         var trades_level_1 = new ArrayList<TradeOffers.Factory>();
         trades_level_1.add(new TradeOffers.SellItemFactory(Items.COOKED_CHICKEN, 2, 1, 12, 10));
         trades_level_1.add(new TradeOffers.SellItemFactory(Items.COOKED_BEEF, 4, 1, 12, 10));
         trades_level_1.add(new TradeOffers.SellItemFactory(Items.BREAD, 4, 1, 12, 10));
         trades_level_1.add(new TradeOffers.SellItemFactory(Items.COOKED_RABBIT, 6, 1, 12, 10));
-        trades.put(1, trades_level_1);
+        TRADES.put(1, trades_level_1);
 
         var trades_level_2 = new ArrayList<TradeOffers.Factory>();
         trades_level_2.add(potionOffer(Potions.STRENGTH, POTION_PRICE_T1, 1, 3, 20));
         trades_level_2.add(potionOffer(Potions.REGENERATION, POTION_PRICE_T1, 1, 3, 20));
         trades_level_2.add(potionOffer(Potions.SWIFTNESS, POTION_PRICE_T1, 1, 3, 20));
         trades_level_2.add(potionOffer(Potions.FIRE_RESISTANCE, POTION_PRICE_T1, 1, 3, 20));
-        trades.put(2, trades_level_2);
+        TRADES.put(2, trades_level_2);
 
         var trades_level_3 = new ArrayList<TradeOffers.Factory>();
         addIfNotNull(trades_level_3, potionOffer("spell_power:spell_power.arcane", POTION_PRICE_T2, 1, 3, 30));
@@ -98,7 +109,7 @@ public class TavernVillagers {
             trades_level_3.add(potionOffer(Potions.NIGHT_VISION, POTION_PRICE_T2, 1, 3, 30));
             trades_level_3.add(potionOffer(Potions.WEAKNESS, POTION_PRICE_T2, 1, 3, 30));
         }
-        trades.put(3, trades_level_3);
+        TRADES.put(3, trades_level_3);
 
         var trades_level_4 = new ArrayList<TradeOffers.Factory>();
         addIfNotNull(trades_level_4, potionOffer("spell_power:spell_power.critical_chance", POTION_PRICE_T3, 1, 3, 30));
@@ -109,20 +120,14 @@ public class TavernVillagers {
             trades_level_4.add(potionOffer(Potions.LONG_LEAPING, POTION_PRICE_T3, 1, 3, 30));
             trades_level_4.add(potionOffer(Potions.WATER_BREATHING, POTION_PRICE_T3, 1, 3, 30));
         }
-        trades.put(4, trades_level_4);
+        TRADES.put(4, trades_level_4);
 
         var trades_level_5 = new ArrayList<TradeOffers.Factory>();
         addIfNotNull(trades_level_5, potionOffer("spell_power:spell_power.haste", POTION_PRICE_T4, 1, 3, 30));
         addIfNotNull(trades_level_5, potionOffer("ranged_weapon:ranged_weapon.haste", POTION_PRICE_T4, 1, 3, 30));
         trades_level_5.add(new TradeOffers.SellItemFactory(Items.OMINOUS_BOTTLE, 60, 1, 1, 40));
         trades_level_5.add(potionOffer(Potions.LONG_FIRE_RESISTANCE, POTION_PRICE_T4, 1, 3, 40));
-        trades.put(5, trades_level_5);
-
-        for (var entry: trades.entrySet()) {
-            TradeOfferHelper.registerVillagerOffers(profession, entry.getKey(), factories -> {
-                factories.addAll(entry.getValue());
-            });
-        }
+        TRADES.put(5, trades_level_5);
     }
 
     private static <T> void addIfNotNull(List<T> list, T item) {

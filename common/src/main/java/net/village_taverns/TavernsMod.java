@@ -19,13 +19,23 @@ public class TavernsMod {
             .build();
 
     public static void init() {
-        TavernBlocks.register();
-        TavernVillagers.register();
-
+        villageConfig.refresh();
         if (!FabricLoader.getInstance().isModLoaded("lithostitched")) {
             // Only inject the village if the Lithostitched is not present
-            villageConfig.refresh();
             StructurePoolAPI.injectAll(villageConfig.value);
         }
+        villageConfig.save();
+    }
+
+    public static void registerBlocks() {
+        TavernBlocks.register();
+    }
+
+    public static void registerPOI() {
+        TavernVillagers.registerPOI();
+    }
+
+    public static void registerVillagers() {
+        TavernVillagers.registerVillagers();
     }
 }
