@@ -1,6 +1,7 @@
 package net.village_taverns;
 
 import com.google.common.collect.ImmutableSet;
+import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.minecraft.block.Block;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.ai.brain.Activity;
@@ -77,10 +78,12 @@ public class TavernVillagers {
         BAR_TENDER_PROFESSION = profession;
 
         setupTrades();
-    }
 
-    public static void registerTrades() {
-        // Platform-specific trade registration will be handled in platform modules
+        for (var entry: TRADES.entrySet()) {
+            TradeOfferHelper.registerVillagerOffers(profession, entry.getKey(), factories -> {
+                factories.addAll(entry.getValue());
+            });
+        }
     }
 
     public static void setupTrades() {

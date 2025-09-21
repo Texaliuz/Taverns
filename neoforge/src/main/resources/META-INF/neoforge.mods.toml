@@ -1,17 +1,17 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
+issueTrackerURL = "https://github.com/ZsoltMolnarrr/Taverns/issues"
+license = "All Rights Reserved
 
 [[mods]]
 modId = "village_taverns"
 version = "${version}"
-displayName = "Village Taverns"
-authors = "Me!"
+displayName = "Village Taverns (RPG Series)"
+authors = "Daedelus"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Find cozy taverns in villages, have a drink, and maybe some rest.
 '''
-#logoFile = ""
+logoFile = "icon.png"
 
 [[dependencies.village_taverns]]
 modId = "neoforge"
@@ -23,9 +23,17 @@ side = "BOTH"
 [[dependencies.village_taverns]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.1,)"
+versionRange = "[${minecraft_compat_version},)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.village_taverns]]
+modId = "structure_pool_api"
+type = "required"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
+
 
 [[mixins]]
 config = "village_taverns.mixins.json"

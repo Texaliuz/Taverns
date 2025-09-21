@@ -10,7 +10,5 @@ public final class FabricMod implements ModInitializer {
         TavernsMod.registerBlocks();
         TavernsMod.registerPOI();
         TavernsMod.registerVillagers();
-
-        FabricTrades.registerTrades();
     }
 }
