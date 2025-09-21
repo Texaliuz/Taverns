@@ -1,3 +1,11 @@
+# 1.1.1
+
+- Fix NeoForge mod descriptor
+
+# 1.1.0
+
+- Migrate to Architectury
+
 # 1.0.7
 
 - Improve snowy village structure
