@@ -1,3 +1,7 @@
+# 1.1.2
+
+- Fix Tiny Config embedding
+
 # 1.1.1
 
 - Fix NeoForge mod descriptor
