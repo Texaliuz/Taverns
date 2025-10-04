@@ -1,3 +1,7 @@
+# 1.1.3
+
+- Fix bartender profession being screwed
+
 # 1.1.2
 
 - Fix Tiny Config embedding

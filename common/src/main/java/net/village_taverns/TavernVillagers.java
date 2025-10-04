@@ -2,7 +2,7 @@ package net.village_taverns;
 
 import com.google.common.collect.ImmutableSet;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
-import net.minecraft.block.Block;
+import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.Schedule;
@@ -28,16 +28,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class TavernVillagers {
-    public static final String BAR_TENDER = "bartender";
+    public static final String BARTENDER = "bartender";
     public static final String ALWAYS_WORK = "always_work";
-    public static final Schedule ALWAYS_WORK_SCHEDULE = new Schedule();
+    public static final Schedule ALWAYS_WORK_SCHEDULE = new ScheduleBuilder(new Schedule())
+            .withActivity(50, Activity.WORK).withActivity(23950, Activity.REST).build();
+    public static final Identifier PROFESSION_ID = Identifier.of(TavernsMod.ID, BARTENDER);
     @Nullable public static VillagerProfession BAR_TENDER_PROFESSION;
-
-    public static PointOfInterestType createPOI(String name, Block block) {
-        return new PointOfInterestType(
-                ImmutableSet.copyOf(block.getStateManager().getStates()),
-                1, 10);
-    }
 
     public static VillagerProfession createProfession(String name, RegistryKey<PointOfInterestType> workStation) {
         var id = Identifier.of(TavernsMod.ID, name);
@@ -59,22 +55,19 @@ public class TavernVillagers {
     private static final int POTION_PRICE_T3 = 32;
     private static final int POTION_PRICE_T4 = 40;
 
-    public static PointOfInterestType POI;
     public static LinkedHashMap<Integer, List<TradeOffers.Factory>> TRADES = new LinkedHashMap<>();
 
     public static void registerPOI() {
-        POI = createPOI(BAR_TENDER, TavernBlocks.BARREL.block());
-        Registry.register(Registries.POINT_OF_INTEREST_TYPE, Identifier.of(TavernsMod.ID, BAR_TENDER), POI);
-
-        var scheduleBuilder = new ScheduleBuilder(ALWAYS_WORK_SCHEDULE).withActivity(50, Activity.WORK).withActivity(23950, Activity.REST).build();
+        var blockStates = ImmutableSet.copyOf(TavernBlocks.BARREL.block().getStateManager().getStates());
+        PointOfInterestHelper.register(PROFESSION_ID, 1, 12, blockStates);
         Registry.register(Registries.SCHEDULE, Identifier.of(TavernsMod.ID, ALWAYS_WORK), ALWAYS_WORK_SCHEDULE);
     }
 
     public static void registerVillagers() {
         var profession = createProfession(
-                BAR_TENDER,
-                RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), Identifier.of(TavernsMod.ID, BAR_TENDER)));
-        Registry.register(Registries.VILLAGER_PROFESSION, Identifier.of(TavernsMod.ID, BAR_TENDER), profession);
+                BARTENDER,
+                RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), PROFESSION_ID));
+        Registry.register(Registries.VILLAGER_PROFESSION, PROFESSION_ID, profession);
         BAR_TENDER_PROFESSION = profession;
 
         setupTrades();
