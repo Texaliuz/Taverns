@@ -1,0 +1,6 @@
+{
+  "block.village_taverns.barrel": "啤酒桶",
+  "block.village_taverns.barrel.hint": "酒保村民的工作台。",
+  "entity.minecraft.villager.bartender": "酒保",
+  "entity.minecraft.villager.village_taverns.bartender": "酒保"
+}
