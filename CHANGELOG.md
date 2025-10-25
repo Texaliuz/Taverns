@@ -1,3 +1,7 @@
+# 1.1.4
+
+- Fix RWA effect compat
+
 # 1.1.3
 
 - Fix bartender profession being screwed

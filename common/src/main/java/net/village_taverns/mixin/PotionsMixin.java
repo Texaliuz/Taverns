@@ -18,7 +18,7 @@ public class PotionsMixin {
                 SpellPowerCompat.init();
             } catch (Throwable t) { }
         }
-        if (FabricLoader.getInstance().isModLoaded("ranged_weapon")) {
+        if (FabricLoader.getInstance().isModLoaded("ranged_weapon_api")) {
             try {
                 RangedWeaponCompat.init();
             } catch (Throwable t) { }
