@@ -1,3 +1,7 @@
+# 1.1.5
+
+- Add compatibility with Critical Strike mod
+
 # 1.1.4
 
 - Fix RWA effect compat
